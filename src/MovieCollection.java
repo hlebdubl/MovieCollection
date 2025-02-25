@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 
@@ -11,6 +12,8 @@ public class MovieCollection
     private ArrayList<Movie> movies;
     private Scanner scanner;
     private ArrayList<String> genreList = new ArrayList<String>();
+    private ArrayList<Movie> revenueList = new ArrayList<>();
+    private ArrayList<Movie> ratingList = new ArrayList<>();
 
     public MovieCollection(String fileName)
     {
@@ -79,6 +82,18 @@ public class MovieCollection
         else
         {
             System.out.println("Invalid choice!");
+        }
+    }
+
+    private void quickTitle(){
+        System.out.print("Enter a tital search term: ");
+        String searchTerm = scanner.nextLine();
+        searchTerm = searchTerm.toLowerCase();
+        for(int i = 0 ; i < movies.size(); i ++){
+            if(movies.get(i).getTitle().toLowerCase().equals(searchTerm)){
+                displayMovieInfo(movies.get(i));
+                break;
+            }
         }
     }
 
@@ -220,18 +235,33 @@ public class MovieCollection
         if(count == 0){
             System.out.println("No such movies");
         }
-
-
     }
 
     private void listHighestRated()
     {
+        ratingList = movies;
 
     }
 
     private void listHighestRevenue()
     {
-
+        revenueList = movies;
+        for(int i = 0 ; i < movies.size() -1; i ++) {
+            if (revenueList.get(i).getRevenue() < revenueList.get(i+1).getRevenue()) {
+                Movie temp = revenueList.get(i);
+                revenueList.set(i,revenueList.get(i+1));
+                revenueList.set(i+1, temp);
+                i = -1;
+            }
+        }
+        for(int i = 0 ; i < 50; i ++){
+            System.out.println(revenueList.get(i));
+            }
+        System.out.println("Do you want to learn more(Y/N): ");
+        String choice = scanner.nextLine().toLowerCase();
+        if (choice.equals("y")){
+            quickTitle();
+        }
     }
 
     private void importMovieList(String fileName)
@@ -270,6 +300,7 @@ public class MovieCollection
                 genreList.sort(String.CASE_INSENSITIVE_ORDER);
 
                 Movie nextMovie = new Movie(title, cast, director, tagline, keywords, overview, runtime, genres, userRating, year, revenue);
+
                 movies.add(nextMovie);
             }
             bufferedReader.close();
