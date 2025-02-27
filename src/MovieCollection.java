@@ -240,7 +240,22 @@ public class MovieCollection
     private void listHighestRated()
     {
         ratingList = movies;
-
+        for(int i = 0 ; i < movies.size() -1; i ++) {
+            if (ratingList.get(i).getUserRating() < ratingList.get(i+1).getUserRating()) {
+                Movie temp = ratingList.get(i);
+                ratingList.set(i,ratingList.get(i+1));
+                ratingList.set(i+1, temp);
+                i = -1;
+            }
+        }
+        for(int i = 0 ; i < 50; i ++){
+            System.out.println(ratingList.get(i));
+        }
+        System.out.println("Do you want to learn more(Y/N): ");
+        String choice = scanner.nextLine().toLowerCase();
+        if (choice.equals("y")){
+            quickTitle();
+        }
     }
 
     private void listHighestRevenue()
